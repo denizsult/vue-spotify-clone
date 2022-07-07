@@ -39,7 +39,7 @@
       <div
         class="px-6 text-xs flex flex-col overflow-y-scroll gap-3 mb-12 h-80"
       >
-        <div v-for="playlist in props.playlists" :key="playlist.id">
+        <div v-for="playlist in props.playlists" :key="playlist?.id">
           <span
             ><a href="" class="truncate">{{ playlist.name }}</a></span
           >
@@ -64,8 +64,8 @@ import heartIcon from "./Icons/heartIcon.vue";
 //playlist 30
  const props = defineProps({
   playlists: {
-    type: Array,
-    default: [],
+    type:Object,
+
   }})
 
 </script>

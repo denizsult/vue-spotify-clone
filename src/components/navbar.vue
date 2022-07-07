@@ -24,6 +24,12 @@
         <button class="bg-white rounded-[50px]  p-3">Oturum aç</button>
 
       </div> -->
+
+      <div class="flex gap-2 justify-center items-center bg-black rounded-[50px] text-white  text-sm pr-3 hover:bg-[#282828] cursor-pointer">
+           <img class="bg-white rounded-[100px] object-cover w-7" :src="user.images ? user.images[0].url : ''" alt=""> 
+          <span class="text-white truncate w-[102px]">{{user.display_name}}</span> 
+          <triangleIcon />        
+      </div>
     </div>
   </div>
 </template>
@@ -32,6 +38,11 @@
 import searchIcon from "./Icons/searchIcon.vue";
 import rightArrowIcon from "./Icons/rightArrowIcon.vue";
 import leftArrowIcon from "./Icons/leftArrowIcon.vue";
+import triangleIcon from "./Icons/triangleIcon.vue";
+import store from "../store";
+import { computed } from "@vue/runtime-core";
+const user = computed(() => {return store.getters.user;})
+
 </script>
 
 <style></style>

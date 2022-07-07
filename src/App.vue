@@ -9,7 +9,6 @@ onMounted(() => {
   let code = params.get("code");
   let key = "86b1f2359e5c444f8366bc09e96232ab";
   let scrt = "fc0dae6751a74a84bd8163dd1dfa52bd";
-
   if (code) {
     axios
       .post(
@@ -17,7 +16,7 @@ onMounted(() => {
         queryString.stringify({
           grant_type: "authorization_code",
           code: code,
-          redirect_uri: "http://localhost:3000/",
+          redirect_uri: window.location.href,
           client_id: key,
           client_secret: scrt,
         }),
