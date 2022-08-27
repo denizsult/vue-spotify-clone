@@ -1,5 +1,19 @@
+import axios from 'axios';
 import { createRouter, createWebHistory } from 'vue-router';
 
+const getMe = (token) => {
+    axios('https://api.spotify.com/v1/me', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    }).then(res => {
+        console.log(res.data);
+    }
+    ).catch(err => {
+        console.log('error');
+    });
+
+}
 
 const router = createRouter({
     history: createWebHistory(),
@@ -26,7 +40,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     let code = localStorage.getItem('code');
-  
     if (to.matched.some(record => record.meta.isPublic)) {
         if (code) {
             next({

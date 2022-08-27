@@ -83,15 +83,18 @@ import logoVue from "../components/logo.vue";
 
 const login = () => {
   const url = "https://accounts.spotify.com/authorize";
-  let params: any = {
-    client_id: "86b1f2359e5c444f8366bc09e96232ab",
+  let key = "86b1f2359e5c444f8366bc09e96232ab";
+  let params:any = {
     response_type: "code",
+    client_id: key,
+    scope:
+      "user-read-private user-read-email streaming playlist-modify-private playlist-read-collaborative playlist-read-private playlist-modify-public user-read-recently-played user-top-read user-read-playback-position user-read-playback-state user-modify-playback-state user-modify-playback-state",
     redirect_uri: "http://localhost:3000/",
-    scope: "user-read-private user-read-email",
-    show_dialog: "true",
-    state: "123",
+    show_dialog: true,
   };
+
   params = new URLSearchParams(params).toString();
+
   window.location.href = `${url}?${params}`;
 };
 

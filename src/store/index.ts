@@ -40,6 +40,8 @@ const store = createStore({
             return state.error;
         },
     },
+
+     
     plugins: [
         store => {
             store.subscribe((mutation, state) => {

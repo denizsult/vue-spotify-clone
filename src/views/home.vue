@@ -9,35 +9,26 @@
 <script lang="ts" setup>
 import sidebar from "../components/sidebar.vue";
 import bodyVue from "../components/body.vue";
-import bottomNavbar from "../components/bottomNavbar.vue";
-import SpotifyWebApi from "spotify-web-api-js";
-import { computed, onMounted, ref } from "@vue/runtime-core";
-import axios from "axios";
-import router from "../router";
+import bottomNavbar from "../components/bottomSection/bottomNavbar.vue";
+import { computed, onMounted, ref, inject } from "@vue/runtime-core";
 import store from "../store";
+const spotify = inject("spotify");
 
 const playlists = ref();
-const spotify = new SpotifyWebApi();
-const user:any = computed(() => {return store.getters.user;})
 
+const user: any = computed(() => {
+  return store.getters.user;
+});
 
 onMounted(async () => {
-await axios("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("code"),
-      },
-    }).then((response) => {
-      store.commit("setUser", response.data);
-    }).catch((error) => {
-      localStorage.removeItem("code");
-      router.push("/login");
-    }); 
-
-  spotify.setAccessToken(localStorage.getItem("code"));
-  spotify.getUserPlaylists(user.id).then((response) => {
-    playlists.value = response.items;   
-  });
+  await getUser();
+  await getPlaylists();
 });
+
+
+const getUser = async () => store.commit("setUser", await spotify.getMe());
+const getPlaylists = async () =>
+  (playlists.value = (await spotify.getUserPlaylists()).items);
 </script>
 
 <style></style>
