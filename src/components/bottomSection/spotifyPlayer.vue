@@ -44,6 +44,7 @@ import playIcon from "../Icons/playIcon.vue";
 import repeatIcon from "../Icons/repeatIcon.vue";
 import shuffleIcon from "../Icons/shuffleIcon.vue";
 import ShuffleIcon from "../Icons/shuffleIcon.vue";
+/* --------------------------------------------------- */
 const songDurationCounter = ref(0);
 const songDuration = ref(0);
 const isPlaying = ref(true);
@@ -52,11 +53,14 @@ const shuffleState = ref(false)
 const emit = defineEmits();
 const props = defineProps(["currentSong", "volume"]);
 const spotify = inject("spotify");
-const playBack = async () => {
+/* --------------------------------------------------- */
 
+const playBack = async () => {
   let progressTracker = document.querySelector(".progressTracker");
   let currentsongDuration = props.currentSong.duration_ms;
-  songDuration.value = millisToMinutesAndSeconds(currentsongDuration);
+  setSongDuration();
+
+
   setInterval(async () => {
     let playbackData = await getPlaybackData();
     let volumeData  = playbackData.device.volume_percent;
@@ -74,13 +78,12 @@ const playBack = async () => {
     if (props.currentSong.id != playbackData.item.id) {
       emit("changeCurrentSong");
     }
-   
-  
       emit('setVolume', volumeData)
   
-    
   }, 1000);
 };
+
+const setSongDuration = () =>  songDuration.value = millisToMinutesAndSeconds(props.currentSong.duration_ms);
 
 const getPlaybackData = async () => {
   return await spotify.getMyCurrentPlaybackState();
@@ -108,17 +111,21 @@ const changeRepeatState = () =>{
   spotify.setRepeat(state ? 'context' : 'off')
 }
 
-const nextSong = async () => {
+const nextSong =  () => {
    spotify.skipToNext();
-  emit("changeCurrentSong");
+   emit("changeCurrentSong");
+  setSongDuration();
+
 };
 
-const previousSong = async () => {
-  spotify.skipToPrevious();
-  emit("changeCurrentSong");
+const previousSong =  () => {
+   spotify.skipToPrevious();
+   emit("changeCurrentSong");
+  setSongDuration();
+
 };
 onMounted(() => {
-  playBack();
+  //playBack();
 });
 
 </script>

@@ -1,9 +1,9 @@
 <template>
   <div class="flex">
     <sidebar :playlists="playlists" class="h-screen static pt-5"></sidebar>
-    <bodyVue class="h-screen w-full"></bodyVue>
-    <bottomNavbar></bottomNavbar>
-  </div>
+    <bodyVue class="w-screen"></bodyVue>
+     <bottomNavbar></bottomNavbar>
+ </div>
 </template>
 
 <script lang="ts" setup>
@@ -31,4 +31,7 @@ const getPlaylists = async () =>
   (playlists.value = (await spotify.getUserPlaylists()).items);
 </script>
 
-<style></style>
+<style>
+
+
+</style>

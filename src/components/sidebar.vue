@@ -1,7 +1,7 @@
 <template>
   <div
     id="sidebar"
-    class="bg-black flex items-start justify-between flex-col gap-5 text-[#b3b3b3]"
+    class="bg-black flex items-start justify-between flex-col gap-5 text-[#b3b3b3] overlow-hidden"
   >
     <div class="flex flex-col gap-5">
       <div class="flex w-full justify-start px-6 mb-3">

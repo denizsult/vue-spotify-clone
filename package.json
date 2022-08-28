@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "colorthief": "^2.3.2",
     "query-string": "^7.1.1",
     "secure-ls": "^1.2.6",
     "spotify-web-api-js": "^1.5.2",
