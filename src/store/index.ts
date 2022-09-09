@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
 import SecureLS from "secure-ls";
-var ls = new SecureLS({ isCompression: false });
-
-
+const ls = new SecureLS({ isCompression: false });
+import playlist from "./spotify/playlist";
+import currentsong from "./spotify/currentsong";
+import spotify from "../utils/spotify";
 const store = createStore({
     state: {
         isAuthenticated: false,
@@ -41,6 +42,16 @@ const store = createStore({
         },
     },
 
+    actions:{
+        async userData({commit}){
+            commit('setUser', await spotify.getMe())
+        }
+    },
+
+    modules:{
+        playlist,
+        currentsong
+    },  
      
     plugins: [
         store => {

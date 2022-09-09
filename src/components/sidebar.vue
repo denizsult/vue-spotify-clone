@@ -32,7 +32,7 @@
         >
       </div>
 
-      <div class="px-6 w-100">
+      <div class="px-6 w-[17rem]">
         <hr class="bg-gray-900 text-gray-900 border border-gray-900" />
       </div>
 

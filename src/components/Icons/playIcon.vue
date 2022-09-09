@@ -4,6 +4,7 @@
     height="16"
     width="16"
     viewBox="0 0 16 16"
+    :fill="fill"
     class="Svg-sc-1bi12j5-0 EQkJl"
   >
     <path
@@ -11,4 +12,13 @@
     ></path>
   </svg>
 </template>
+<script setup>
+  const props = defineProps({
+    fill:{
+      type: String,
+      default: 'black'
+    }
+  })
+
+</script>
  

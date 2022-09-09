@@ -1,6 +1,6 @@
 <template>
-  <div class="flex text-white flex-col w-72 justify-center gap-2 items-center">
-    <div class="flex justify-center items-center gap-5 h-12 w-48">
+  <div class="flex text-white flex-col w-72 items-center">
+    <div class="flex justify-center items-center gap-5  h-12 w-48">
       <div class="w-20" @click="changeShuffleState">
         <shuffle-icon class="hover:fill-white" :shuffleState="shuffleState" />
       </div>
@@ -24,19 +24,19 @@
       </div>
     </div>
     <div class="progress-container">
-      <small class="text-[#a7a7a7] text-xs">{{ songDurationCounter }}</small>
+      <small class="text-[#a7a7a7] text-[0.65rem]">{{ songDurationCounter }}</small>
 
       <div class="progressBar">
         <span class="progressTracker"></span>
       </div>
 
-      <small class="text-[#a7a7a7] text-xs">{{ songDuration }}</small>
+      <small class="text-[#a7a7a7] text-[0.65rem]">{{ songDuration }}</small>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from "@vue/runtime-core";
+import { onMounted, ref, inject, computed, watch } from "@vue/runtime-core";
 import skipForwardIcon from "../Icons/skipForwardIcon.vue";
 import skipBackIcon from "../Icons/skipBackIcon.vue";
 import pauseIcon from "../Icons/pauseIcon.vue";
@@ -44,27 +44,31 @@ import playIcon from "../Icons/playIcon.vue";
 import repeatIcon from "../Icons/repeatIcon.vue";
 import shuffleIcon from "../Icons/shuffleIcon.vue";
 import ShuffleIcon from "../Icons/shuffleIcon.vue";
+import store from "../../store";
 /* --------------------------------------------------- */
-const songDurationCounter = ref(0);
-const songDuration = ref(0);
+const songDurationCounter = ref("0:00");
+const songDuration = ref("0:00");
 const isPlaying = ref(true);
 const repeatState = ref(false)
 const shuffleState = ref(false)
 const emit = defineEmits();
-const props = defineProps(["currentSong", "volume"]);
+const props = defineProps(["volume"]);
 const spotify = inject("spotify");
+const currentSong = computed(() => store.getters.getSong)
 /* --------------------------------------------------- */
+
+
+
 
 const playBack = async () => {
   let progressTracker = document.querySelector(".progressTracker");
-  let currentsongDuration = props.currentSong.duration_ms;
-  setSongDuration();
 
 
   setInterval(async () => {
     let playbackData = await getPlaybackData();
     let volumeData  = playbackData.device.volume_percent;
     let playbackTime = playbackData.progress_ms;
+    let currentsongDuration = currentSong.value.duration_ms;
     songDurationCounter.value = millisToMinutesAndSeconds(playbackTime);
     isPlaying.value = playbackData.is_playing;
     repeatState.value = playbackData.repeat_state === 'off' ? false : true;
@@ -75,7 +79,7 @@ const playBack = async () => {
     if (progress === 100) {
       emit("changeCurrentSong");
     }
-    if (props.currentSong.id != playbackData.item.id) {
+    if (currentSong.id != playbackData.item.id) {
       emit("changeCurrentSong");
     }
       emit('setVolume', volumeData)
@@ -83,7 +87,14 @@ const playBack = async () => {
   }, 1000);
 };
 
-const setSongDuration = () =>  songDuration.value = millisToMinutesAndSeconds(props.currentSong.duration_ms);
+
+watch(
+  () => currentSong.value,
+  (value, oldvalue) => {
+    songDuration.value = millisToMinutesAndSeconds(currentSong.value?.duration_ms);
+  }
+)
+
 
 const getPlaybackData = async () => {
   return await spotify.getMyCurrentPlaybackState();
@@ -113,19 +124,15 @@ const changeRepeatState = () =>{
 
 const nextSong =  () => {
    spotify.skipToNext();
-   emit("changeCurrentSong");
-  setSongDuration();
 
 };
 
 const previousSong =  () => {
-   spotify.skipToPrevious();
-   emit("changeCurrentSong");
-  setSongDuration();
+ spotify.skipToPrevious();
 
 };
 onMounted(() => {
-  //playBack();
+  playBack();
 });
 
 </script>
@@ -136,7 +143,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   gap: 0.25rem;
-  width: 500px;
+  width: 540px;
 }
 
 .progressBar {
@@ -146,7 +153,7 @@ onMounted(() => {
   position: relative;
   color: white;
   display: flex;
-  border-radius: 5px;
+  border-radius: 20px;
   margin: 0 0.5rem;
 }
 
@@ -161,8 +168,8 @@ onMounted(() => {
 }
 
 .playButton {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: white;
   border: 1px solid white;

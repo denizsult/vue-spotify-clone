@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky w-full h-16 navBar">
+  <div class="fixed left-[15rem] w-[83vw] h-16 navBar">
     <div class="flex items-center justify-between h-full px-7">
       <div class="flex gap-5 items-center">
         <div class="flex gap-5">

@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="bg-[#121212] pb-10 overflow-y-scroll text-white relative body"
-  >
-    <Navbar />
+  <div>
     <div ref="backgroundColorContainer" class="backgroundColor"></div>
     <div class="bg-gradiant"></div>
-    <div class="h-72 flex flex-col px-8 gap-5 pt-1 relative">
+    <div class="h-72 flex flex-col px-8 gap-5 pt-20 relative">
       <h1 class="text-[2rem] font-bold">Tünaydın</h1>
       <div class="flex justify-between gap-1">
         <basic-playlist-card
@@ -29,7 +26,7 @@
       </div>
     </div>
 
-    <div class="px-8">
+    <div class="px-8 mt-20">
       <div class="flex justify-between text-gray-300 mb-5">
         <h1 class="text-[1.4rem] font-bold">Son Dinlediklerinize Dayanarak</h1>
         <h3 class="text-sm tracking-wider">HEPSİNİ GÖR</h3>
@@ -42,7 +39,7 @@
         />
       </div>
     </div>
-    <div class="px-8">
+    <div class="px-8 mt-5" >
       <div class="flex justify-between text-gray-300 mb-5">
         <h1 class="text-[1.4rem] font-bold">Son Dinlediklerinize Dayanarak</h1>
         <h3 class="text-sm tracking-wider">HEPSİNİ GÖR</h3>
@@ -55,7 +52,7 @@
         />
       </div>
     </div>
-    <div class="px-8">
+    <div class="px-8 mt-5">
       <div class="flex justify-between text-gray-300 mb-5">
         <h1 class="text-[1.4rem] font-bold">Son Dinlediklerinize Dayanarak</h1>
         <h3 class="text-sm tracking-wider">HEPSİNİ GÖR</h3>
@@ -72,7 +69,6 @@
 </template>
 
 <script lang="ts" setup>
-import navBarVue from "./navbar.vue";
 import basicPlaylistCard from "./elements/basicPlaylistCard.vue";
 import playlistCard from "./elements/playlistCard.vue";
 import { inject, onMounted, ref } from "@vue/runtime-core";
@@ -119,7 +115,7 @@ onMounted(async () => {
 
 .bg-gradiant {
   width: 100%;
-  height: 16rem;
+  height: 20rem;
   position: absolute;
   background: linear-gradient(
     0deg,
@@ -128,7 +124,4 @@ onMounted(async () => {
   );
 }
 
-.body{
-  height: 90vh;
-}
 </style>

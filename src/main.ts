@@ -3,9 +3,7 @@ import App from './App.vue'
 import '../index.css'
 import store from './store'
 import router from './router'
-import SpotifyWebApi from "spotify-web-api-js";
-const spotify = new SpotifyWebApi();
-spotify.setAccessToken(localStorage.getItem("code"));
+import spotify from './utils/spotify'
 
 const app = createApp(App);
 
