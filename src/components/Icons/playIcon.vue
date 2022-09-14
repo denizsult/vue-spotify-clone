@@ -1,8 +1,8 @@
 <template>
   <svg
     role="img"
-    height="16"
-    width="16"
+    :height="height"
+    :width="width"
     viewBox="0 0 16 16"
     :fill="fill"
     class="Svg-sc-1bi12j5-0 EQkJl"
@@ -17,6 +17,12 @@
     fill:{
       type: String,
       default: 'black'
+    },
+    height:{
+      default:"16"
+    },
+    width:{
+      default:"16"
     }
   })
 

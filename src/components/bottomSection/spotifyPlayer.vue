@@ -90,7 +90,7 @@ const playBack = async () => {
 
 watch(
   () => currentSong.value,
-  (value, oldvalue) => {
+  () => {
     songDuration.value = millisToMinutesAndSeconds(currentSong.value?.duration_ms);
   }
 )
@@ -123,8 +123,7 @@ const changeRepeatState = () =>{
 }
 
 const nextSong =  () => {
-   spotify.skipToNext();
-
+  spotify.skipToNext();
 };
 
 const previousSong =  () => {
@@ -132,7 +131,7 @@ const previousSong =  () => {
 
 };
 onMounted(() => {
-  playBack();
+  //playBack();
 });
 
 </script>

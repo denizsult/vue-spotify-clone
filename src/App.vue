@@ -1,26 +1,39 @@
 <script setup>
-import axios from "axios";
-import { inject, onMounted, ref } from "vue";
-import queryString from "query-string";
+import { inject, onMounted, ref, reactive, watch } from "vue";
 import sidebar from "./components/sidebar.vue";
 import Navbar from "./components/navbar.vue";
 import bottomNavbar from "./components/bottomSection/bottomNavbar.vue";
-import router from "./router";
+import { useRoute,  onBeforeRouteUpdate} from "vue-router";
 import store from "./store";
 
 const spotify = inject("spotify");
 const playlists = ref([]);
-const appBody = ref()
-const navbar = ref()
-const getPlaylists = async () =>
-  (playlists.value = (await spotify.getUserPlaylists()).items);
+const appBody = ref();
+const navbar = ref();
+const route = useRoute();
+const layout = ref(true);
+
+const getPlaylists = async () => {
+  playlists.value = (await spotify.getUserPlaylists()).items;
+};
+
+watch(
+  route,
+  (to) => {
+    layout.value = to.meta.layout;
+  },
+  { flush: "pre", immediate: true, deep: true }
+);
+
+onBeforeRouteUpdate(async (to, from) => {
+    console.log('spakdpşask');
+  })
 
 
+  store.dispatch('initilazeCode')
+  store.dispatch("userData");
 
-onMounted(async () => {
-  store.dispatch('userData')
-
-/*   appBody.value?.addEventListener('scroll', (event) => {
+  /*   appBody.value?.addEventListener('scroll', (event) => {
     if(appBody?.scrollTop > 50){
       navbar.value.style.backgroundColor = "black"
     }else{
@@ -28,72 +41,42 @@ onMounted(async () => {
     }
   }) */
 
-  const params = new URLSearchParams(window.location.search);
-  let code = params.get("code");
+ 
 
-  let key = "86b1f2359e5c444f8366bc09e96232ab";
-  let scrt = "fc0dae6751a74a84bd8163dd1dfa52bd";
-  if (code) {
-    axios
-      .post(
-        "https://accounts.spotify.com/api/token",
-        queryString.stringify({
-          grant_type: "authorization_code",
-          code: code,
-          redirect_uri: "http://localhost:3000/",
-          client_id: key,
-          client_secret: scrt,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      )
-      .then(async (response) => {
-        localStorage.setItem("code", response.data.access_token);
-        router.push("/");
-      });
-  
-  }
-
-  await getPlaylists();
-
-});
+   getPlaylists();
 </script>
 
 <template>
   <div class="flex">
-    <sidebar :playlists="playlists" class="h-screen static pt-5"></sidebar>
-    <Navbar  ref="navbar"/>
+    <sidebar v-if="layout"  :playlists="playlists" class="h-screen static pt-5"></sidebar>
+    <Navbar  v-if="layout" ref="navbar" />
     <router-view
       ref="appBody"
-      class="bg-[#121212]  pb-10 h-[91vh] overflow-x-hidden text-white relative"
+      class="bg-[#121212] pb-10 h-[95vh] overflow-x-hidden text-white relative"
     ></router-view>
-    <bottomNavbar></bottomNavbar>
+    <bottomNavbar  v-if="layout" />
   </div>
 </template>
 
 <style>
+
+ 
 body {
   overflow: overlay;
-  overflow-x: hidden !important;
 }
 /* width */
 ::-webkit-scrollbar {
-  background: transparent !important;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
+  width: 10px;
+  height: 10px;
   background: transparent;
-  max-height: 200px;
-  height: 100px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
+  background: white;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
   background: red;
-  border-radius: 10px;
 }
 </style>

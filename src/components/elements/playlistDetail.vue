@@ -9,6 +9,8 @@
         ref="playlistImage"
         width="232"
         height="232"
+        rel="preload"
+        class="object-contain"
         :src="playlist.images[0].url"
         alt=""
       />
@@ -27,7 +29,14 @@
       </div>
     </div>
 
-    <div>dasojda</div>
+    <div class="flex items-center gap-5">
+      <div class="p-5 bg-[#1db954] rounded-[100%]">
+        <play-icon height="20" width="20" />
+      </div>
+      <div>
+        <heart-icon :liked="playlist" height="32" width="32" />
+      </div>
+    </div>
 
     <div v-if="playlist" class="px-4">
       <table class="tracksTable">
@@ -54,7 +63,7 @@
                 {{ index + 1 }}
               </span>
               <span v-else>
-                <PlayIcon fill="white" />
+                <play-icon fill="white" />
               </span>
             </td>
             <td>
@@ -62,6 +71,7 @@
                 <img
                   width="40"
                   height="40"
+                  class="object-contain"
                   :src="playlistItem.track?.album.images[0].url"
                   alt=""
                 />
@@ -91,28 +101,30 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref, inject } from "@vue/runtime-core";
+import { onMounted, computed, ref, inject, watch, onUpdated } from "@vue/runtime-core";
 import router from "../../router";
 import colorthief from "colorthief";
 import playIcon from "../Icons/playIcon.vue";
-import PlayIcon from "../Icons/playIcon.vue";
+import heartIcon from "../Icons/heartIcon.vue";
 import store from "../../store";
 ////////////////////////////////////////////////////////////
 const spotify = inject("spotify");
 const colorThief = new colorthief();
 const playlist = ref(null);
 const playlistImage = ref();
-const playlistID = router.currentRoute.value.params.id;
+const playlistID = computed(() => router.currentRoute.value.params.id);
 const backgroundColor = ref(18, 18, 18);
 ////////////////////////////////////////////////////////////
 const getPlaylist = async () => {
-  playlist.value = await spotify.getPlaylist(playlistID);
+  playlist.value = await spotify.getPlaylist(playlistID.value);
+  console.log(playlist.value);
 };
 
 const millisToMinutesAndSeconds = (millis) => {
-  var minutes = Math.floor(millis / 60000);
-  var hours = Math.floor(minutes / 60000);
-  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  let hours = Math.floor(millis / 60000) / 60000;
+  let minutes = Math.floor(millis / 60000);
+  let seconds = ((millis % 60000) / 1000).toFixed(0);
+
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 };
 
@@ -144,12 +156,21 @@ const setActiveSong = () => {
   );
 };
 
+watch(
+  () => playlistID.value,
+  async () => {
+    await getPlaylist()
+  }
+);
+
+onUpdated(()=> {
+  playlistImage.value.addEventListener("load", () => {
+    backgroundColor.value = colorThief.getColor(playlistImage.value);
+  });})
+
 onMounted(async () => {
   await getPlaylist();
   setActiveSong();
-  playlistImage.value.addEventListener("load", () => {
-    backgroundColor.value = colorThief.getColor(playlistImage.value);
-  });
 });
 </script>
 
@@ -193,8 +214,15 @@ onMounted(async () => {
   font-weight: 300;
   padding: 0 1rem;
   letter-spacing: 2px;
+  border-bottom: 1px solid rgba(227, 224, 224, 0.2);
 }
 
+.tracksTable tbody:before {
+  line-height: 1rem;
+  content: "-";
+  color: transparent; /* to hide text */
+  display: block;
+}
 .tracksTable tbody td {
   padding: 0 1rem;
 }

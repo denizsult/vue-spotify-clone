@@ -3,13 +3,16 @@
     id="sidebar"
     class="bg-black flex items-start justify-between flex-col gap-5 text-[#b3b3b3] overlow-hidden"
   >
-    <div class="flex flex-col gap-5">
-      <div class="flex w-full justify-start px-6 mb-3">
+    <div class="flex w-full  flex-col gap-5">
+      <div
+        @click="router.push('/')"
+        class="flex w-full justify-start px-6 mb-3"
+      >
         <logoVue />
       </div>
 
       <ul class="px-6">
-        <li><home-icon /> Ana sayfa</li>
+        <li @click="router.push('/')"><home-icon /> Ana sayfa</li>
         <li><search-icon /> Ara</li>
         <li><library-icon /> Kitaplığın</li>
       </ul>
@@ -26,7 +29,7 @@
           <div
             class="bg-[linear-gradient(135deg,#450af5,#c4efd9)] w-6 h-6 flex items-center justify-center rounded-sm"
           >
-            <heart-icon />
+            <heart-icon height="12" width="12" active />
           </div>
           Beğenilen Şarkılar</a
         >
@@ -37,12 +40,18 @@
       </div>
 
       <div
-        class="px-6 text-xs flex flex-col overflow-y-scroll gap-3 mb-12 h-80"
+        class="px-6 text-sm flex flex-col  gap-1 w-full mb-12 "
       >
-        <div v-for="playlist in props.playlists" :key="playlist?.id">
-          <span
-            ><a href="" class="truncate">{{ playlist.name }}</a></span
-          >
+        <div
+          @click="
+            router.push({ name: 'playlist', params: { id: playlist.id } })
+          "
+          v-for="playlist in playlists"
+          :key="playlist?.id"
+          class="cursor-pointer truncate "
+
+        >
+          {{ playlist.name }}
         </div>
       </div>
     </div>
@@ -61,13 +70,13 @@ import searchIcon from "./Icons/searchIcon.vue";
 import libraryIcon from "./Icons/libraryIcon.vue";
 import plusIcon from "./Icons/plusIcon.vue";
 import heartIcon from "./Icons/heartIcon.vue";
+import router from "../router";
 //playlist 30
- const props = defineProps({
+const props = defineProps({
   playlists: {
-    type:Object,
-
-  }})
-
+    type: Object,
+  },
+});
 </script>
 
 <style>

@@ -6,60 +6,52 @@ import currentsong from "./spotify/currentsong";
 import spotify from "../utils/spotify";
 const store = createStore({
     state: {
-        isAuthenticated: false,
         user: {},
-        token: "",
-        error: "",
- 
+        code: "",
     },
     mutations: {
-        setIsAuthenticated(state, isAuthenticated) {
-            state.isAuthenticated = isAuthenticated;
-        },
-        setUser(state, user) {  
+
+        setUser(state, user) {
             state.user = user;
         },
-        setToken(state, token) {
-            state.token = token;
+        setCode(state, code) {
+            state.code = code;
         },
-        setError(state, error) {
-            state.error = error;
-        },
-       
+
+
     },
-    getters:{
-        isAuthenticated(state) {
-            return state.isAuthenticated;
-        },
+    getters: {
+
         user(state) {
             return state.user;
         },
         token(state) {
-            return state.token;
+            return state.code;
         },
-        error(state) {
-            return state.error;
-        },
+
     },
 
-    actions:{
-        async userData({commit}){
+    actions: {
+        async userData({ commit }) {
+            console.log('s');
             commit('setUser', await spotify.getMe())
+        },
+
+        async initilazeCode({ state }) {
+            spotify.setAccessToken(state?.code??localStorage.getItem('code'))
         }
     },
 
-    modules:{
+    modules: {
         playlist,
         currentsong
-    },  
-     
+    },
+
     plugins: [
         store => {
             store.subscribe((mutation, state) => {
-                ls.set("isAuthenticated", state.isAuthenticated);
                 ls.set("user", state.user);
-                ls.set("token", state.token);
-                ls.set("error", state.error);
+                ls.set("code", state.code);
             });
         }]
 });
