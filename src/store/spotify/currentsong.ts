@@ -13,13 +13,13 @@ export default {
 
     },
     getters: {
-        getSong(state){
+        getSong(state:any){
             return state.song
         }
     },
 
     actions:{
-        async currentSong({ commit }){
+        async currentSong({ commit }:any){
             commit('setSong', (await spotify.getMyCurrentPlayingTrack())?.item)
         }
     }

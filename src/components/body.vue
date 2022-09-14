@@ -71,12 +71,10 @@
 <script lang="ts" setup>
 import basicPlaylistCard from "./elements/basicPlaylistCard.vue";
 import playlistCard from "./elements/playlistCard.vue";
-import { inject, onMounted, ref } from "@vue/runtime-core";
-import Navbar from "./navbar.vue";
-const spotify = inject("spotify");
-const playlists = ref([]);
-const featuredPlaylists = ref([]);
-
+import { onMounted, ref } from "@vue/runtime-core";
+import spotify from "../utils/spotify";
+const playlists = ref();
+const featuredPlaylists = ref();
 const backgroundColor = ref([18, 18, 18]);
 const backgroundColorContainer = ref();
 
