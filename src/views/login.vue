@@ -92,6 +92,7 @@ const login = () => {
     redirect_uri:  window.location.origin,
     show_dialog: true,
   };
+  alert(window.location.origin)
   params = new URLSearchParams(params).toString();
   window.location.href = `${url}?${params}`;
 };
