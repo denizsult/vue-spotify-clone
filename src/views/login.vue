@@ -89,7 +89,7 @@ const login = () => {
     client_id: key,
     scope:
       "user-read-private user-read-email streaming playlist-modify-private playlist-read-collaborative playlist-read-private playlist-modify-public user-read-recently-played user-top-read user-read-playback-position user-read-playback-state user-modify-playback-state user-modify-playback-state",
-    redirect_uri:  window.location.origin + '/',
+    redirect_uri:  window.location.origin,
     show_dialog: true,
   };
   params = new URLSearchParams(params).toString();

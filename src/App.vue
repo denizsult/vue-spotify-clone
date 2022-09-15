@@ -32,7 +32,7 @@ router.beforeEach(async (to, from, next) => {
         queryString.stringify({
           grant_type: "authorization_code",
           code: requestCode,
-          redirect_uri:window.location.origin + '/',
+          redirect_uri:window.location.origin,
           client_id: key,
           client_secret: scrt,
         }),
