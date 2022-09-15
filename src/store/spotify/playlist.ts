@@ -31,7 +31,7 @@ const playlist = {
     },
 
     actions: {
-        async getPlaylistsFromSpotify({ commit }) {
+        async getPlaylistsFromSpotify({ commit }:any) {
             commit('setPlaylist', await spotify.getUserPlaylists())
         }
     }
