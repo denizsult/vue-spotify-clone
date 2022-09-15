@@ -31,7 +31,7 @@ export default {
         },
         
         getSongItem(state:currentSongstate ){
-            return state.song.item;
+            return state.song?.item;
         }
     },
 

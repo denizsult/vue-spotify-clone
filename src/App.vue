@@ -26,7 +26,6 @@ router.beforeEach(async (to, from, next) => {
   let key = "86b1f2359e5c444f8366bc09e96232ab";
   let scrt = "fc0dae6751a74a84bd8163dd1dfa52bd";
   if (requestCode && !localStorage.getItem("token") ) {
-    alert(window.location.origin)
     await axios
       .post(
         "https://accounts.spotify.com/api/token",
