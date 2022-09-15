@@ -1,59 +1,44 @@
 import { createStore } from "vuex";
-import SecureLS from "secure-ls";
-const ls = new SecureLS({ isCompression: false });
+import spotify from "../utils/spotify";
+import router from "../router";
+////////////////////////////////////////////////////
 import playlist from "./spotify/playlist";
 import currentsong from "./spotify/currentsong";
-import spotify from "../utils/spotify";
+////////////////////////////////////////////////////
+
 const store = createStore({
     state: {
         user: {},
-        code: "",
-    },
+     },
     mutations: {
-
         setUser(state, user) {
             state.user = user;
         },
-        setCode(state, code) {
-            state.code = code;
-        },
+       
+
 
 
     },
     getters: {
-
-        user(state) {
+        getUser(state) {
             return state.user;
         },
-        token(state) {
-            return state.code;
-        },
 
+       
     },
 
     actions: {
-        async userData({ commit }) {
-            console.log('s');
-            commit('setUser', await spotify.getMe())
-        },
-
-        async initilazeCode({ state }) {
-            spotify.setAccessToken(state?.code??localStorage.getItem('code'))
+        async getUserFromSpotify({ commit }) {
+            spotify.getMe().then((response) => {
+                commit('setUser', response)
+            }).catch(() => { localStorage.setItem('token', ''); router.push('/login') })
         }
     },
 
     modules: {
         playlist,
         currentsong
-    },
-
-    plugins: [
-        store => {
-            store.subscribe((mutation, state) => {
-                ls.set("user", state.user);
-                ls.set("code", state.code);
-            });
-        }]
+    }
 });
 
 

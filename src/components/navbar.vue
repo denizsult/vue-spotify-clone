@@ -52,7 +52,7 @@ import triangleIcon from "./Icons/triangleIcon.vue";
 import store from "../store";
 import { computed } from "@vue/runtime-core";
 const user = computed(() => {
-  return store.getters.user;
+  return store.getters.getUser;
 });
 
 const props = defineProps({

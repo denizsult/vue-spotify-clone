@@ -147,7 +147,7 @@ const playSong = async (song) => {
 };
 
 const setActiveSong = () => {
-  const currentSong = store.getters.getSong;
+  const currentSong = store.getters.getSongItem;
   const tracks = playlist.value.tracks.items;
   tracks.filter((item) =>
     item.track.id === currentSong.id

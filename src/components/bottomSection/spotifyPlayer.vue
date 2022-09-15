@@ -54,7 +54,7 @@ const shuffleState = ref(false)
 const emit = defineEmits();
 const props = defineProps(["volume"]);
 const spotify = inject("spotify");
-const currentSong = computed(() => store.getters.getSong)
+const currentSong = computed(() => store.getters.getSongItem)
 /* --------------------------------------------------- */
 
 

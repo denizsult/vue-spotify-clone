@@ -71,12 +71,10 @@ import libraryIcon from "./Icons/libraryIcon.vue";
 import plusIcon from "./Icons/plusIcon.vue";
 import heartIcon from "./Icons/heartIcon.vue";
 import router from "../router";
+import { computed } from "@vue/runtime-core";
+import store from "../store";
 //playlist 30
-const props = defineProps({
-  playlists: {
-    type: Object,
-  },
-});
+const playlists = computed(() => store.getters.playlistItems);
 </script>
 
 <style>
