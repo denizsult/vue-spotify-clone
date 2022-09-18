@@ -4,6 +4,9 @@ import '../index.css'
 import store from './store'
 import router from './router'
 import spotify from './utils/spotify'
+ 
+
+
 
 const app = createApp(App);
 

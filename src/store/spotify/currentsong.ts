@@ -20,6 +20,7 @@ export default {
     state: {
         song: {},
     },
+    
     mutations: {
         setSong(state:any, song:object){
             state.song = song;

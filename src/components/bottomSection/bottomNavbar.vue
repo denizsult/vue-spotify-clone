@@ -52,6 +52,8 @@ const volumeProgress = ref(0);
 const currentSong = computed(()=> store.getters.getSongItem);
 
 
+store.dispatch('getPlayerFromSpotify')
+
 const setVolume = (data) => {
   volumeDOM.value.value = data;
   volume.value = parseInt(data);

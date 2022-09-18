@@ -1,2 +1,4 @@
 import SpotifyWebApi from "spotify-web-api-js";
-export default new SpotifyWebApi();
+const spotify = new SpotifyWebApi();
+spotify.setAccessToken(localStorage.getItem("token"));
+export default spotify;

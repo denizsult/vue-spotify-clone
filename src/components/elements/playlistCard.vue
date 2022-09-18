@@ -7,6 +7,8 @@
       <img
         class="object-cover h-full w-full rounded-md"
         :src="playlist?.images[0].url"
+        width="100"
+        height="100"
         alt=""
       />
     </div>

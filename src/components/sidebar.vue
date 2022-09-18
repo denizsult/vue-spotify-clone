@@ -1,7 +1,7 @@
 <template>
   <div
     id="sidebar"
-    class="bg-black flex items-start justify-between flex-col gap-5 text-[#b3b3b3] overlow-hidden"
+    class="bg-black flex items-start justify-between flex-col overflow-hidden gap-5 text-[#b3b3b3] overlow-hidden"
   >
     <div class="flex w-full  flex-col gap-5">
       <div
@@ -12,7 +12,7 @@
       </div>
 
       <ul class="px-6">
-        <li @click="router.push('/')"><home-icon /> Ana sayfa</li>
+        <li @click="router.push('/')" class="cursor-pointer"><home-icon /> Ana sayfa</li>
         <li><search-icon /> Ara</li>
         <li><library-icon /> Kitaplığın</li>
       </ul>
@@ -40,7 +40,7 @@
       </div>
 
       <div
-        class="px-6 text-sm flex flex-col  gap-1 w-full mb-12 "
+        class="px-6 text-sm flex flex-col overflow-scroll h-full gap-2 w-full mb-12 "
       >
         <div
           @click="
@@ -48,7 +48,7 @@
           "
           v-for="playlist in playlists"
           :key="playlist?.id"
-          class="cursor-pointer truncate "
+          class="cursor-pointer truncate  "
 
         >
           {{ playlist.name }}

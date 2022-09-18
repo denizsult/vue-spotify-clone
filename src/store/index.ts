@@ -4,19 +4,23 @@ import router from "../router";
 ////////////////////////////////////////////////////
 import playlist from "./spotify/playlist";
 import currentsong from "./spotify/currentsong";
+import player from "./spotify/player";
 ////////////////////////////////////////////////////
 
 const store = createStore({
     state: {
         user: {},
+        layout: false
      },
     mutations: {
         setUser(state, user) {
             state.user = user;
         },
+
+        setLayout(state, layout){
+            state.layout = layout
+        }
        
-
-
 
     },
     getters: {
@@ -24,6 +28,9 @@ const store = createStore({
             return state.user;
         },
 
+        getLayout(state){
+            return state.layout
+        }
        
     },
 
@@ -37,7 +44,8 @@ const store = createStore({
 
     modules: {
         playlist,
-        currentsong
+        currentsong,
+        player
     }
 });
 
