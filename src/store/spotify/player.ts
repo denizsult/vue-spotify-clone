@@ -11,7 +11,7 @@ const player = {
         currently_playing_type:'',
     },
     mutations: {
-       setPlayStatus(state, is_playing){
+       setPlayStatus(state:any, is_playing:any){
         state.is_playing = is_playing
        }
     },

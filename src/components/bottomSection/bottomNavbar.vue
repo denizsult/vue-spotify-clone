@@ -41,15 +41,15 @@
 </template>
 
 <script setup>
-import { computed, inject, ref } from "@vue/runtime-core";
+import { computed, inject, onMounted, ref } from "@vue/runtime-core";
 import store from "../../store";
-import heartIcon from "../Icons/heartIcon.vue";
+import { heartIcon } from "../Icons";
 import SpotifyPlayer from "./spotifyPlayer.vue";
 const spotify = inject("spotify");
 const volume = ref(0);
 const volumeDOM = ref();
 const volumeProgress = ref(0);
-const currentSong = computed(()=> store.getters.getSongItem);
+const currentSong = computed(()=> store.getters.getSongItem??null);
 
 
 store.dispatch('getPlayerFromSpotify')

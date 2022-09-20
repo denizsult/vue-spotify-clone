@@ -4,13 +4,13 @@
     <div class="bg-gradiant"></div>
     <div class="h-72 flex flex-col px-8 gap-5 pt-20 relative">
       <h1 class="text-[2rem] font-bold">Tünaydın</h1>
+      
+      
       <div class="flex justify-between gap-1" v-if="playlists">
         <basic-playlist-card
           v-for="playlist in playlists?.slice(0, 3)"
           :key="playlist"
-          :name="playlist.name"
-          :link="playlist.href"
-          :img="playlist?.images[0]?.url"
+          :playlist="playlist"
           @setBackgroundColor="setBackgroundColor"
         />
       </div>
@@ -18,13 +18,14 @@
         <basic-playlist-card
           v-for="playlist in playlists?.slice(3, 6)"
           :key="playlist"
-          :name="playlist.name"
-          :link="playlist.href"
-          :img="playlist.images[0].url"
+          :playlist="playlist"
           @setBackgroundColor="setBackgroundColor"
         />
       </div>
     </div>
+
+
+
 
     <div class="px-8 mt-20">
       <div class="flex justify-between text-gray-300 mb-5">
@@ -46,7 +47,7 @@
       </div>
       <div class="flex gap-5">
         <playlist-card
-          v-for="playlist in featuredPlaylists?.slice(0, 5)"
+        v-for="playlist in featuredPlaylists?.slice(0, 5)"
           :key="playlist?.id"
           :playlist="playlist"
         />
@@ -59,7 +60,7 @@
       </div>
       <div class="flex gap-5">
         <playlist-card
-          v-for="playlist in featuredPlaylists?.slice(0, 5)"
+        v-for="playlist in featuredPlaylists?.slice(0, 5)"
           :key="playlist?.id"
           :playlist="playlist"
         />
@@ -89,10 +90,12 @@ const getFeaturedPlaylists = async () =>
   (featuredPlaylists.value = (
     await spotify.getFeaturedPlaylists()
   ).playlists?.items);
-
 onMounted(async () => {
   getFeaturedPlaylists();
 });
+
+
+
 </script>
 
 <style scoped>

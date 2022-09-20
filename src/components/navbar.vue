@@ -3,10 +3,10 @@
     <div class="flex items-center justify-between h-full px-7">
       <div class="flex gap-5 items-center">
         <div class="flex gap-5">
-          <div class="p-1 rounded-[100%] bg-[rgba(18,18,18,0.8)]">
+          <div @click="router.go(-1)" class="p-1 rounded-[100%] cursor-pointer bg-[rgba(18,18,18,0.8)]">
             <left-arrow-icon />
           </div>
-          <div class="p-1 rounded-[100%] bg-[rgba(18,18,18,0.8)]">
+          <div @click="router.go(1)" class="p-1 rounded-[100%] cursor-pointer bg-[rgba(18,18,18,0.8)]">
             <right-arrow-icon />
           </div>
         </div>
@@ -45,15 +45,11 @@
 </template>
 
 <script lang="ts" setup>
-import searchIcon from "./Icons/searchIcon.vue";
-import rightArrowIcon from "./Icons/rightArrowIcon.vue";
-import leftArrowIcon from "./Icons/leftArrowIcon.vue";
-import triangleIcon from "./Icons/triangleIcon.vue";
-import store from "../store";
+import {searchIcon, leftArrowIcon, triangleIcon, rightArrowIcon}  from './Icons'
 import { computed } from "@vue/runtime-core";
-const user = computed(() => {
-  return store.getters.getUser;
-});
+import store from '../store';
+import router from '../router';
+const user = computed(() => store.getters.getUser);
 
 const props = defineProps({
   isSearch: {

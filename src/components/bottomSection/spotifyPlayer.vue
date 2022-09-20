@@ -1,6 +1,6 @@
 <template>
   <div class="flex text-white flex-col w-72 items-center">
-    <div class="flex justify-center items-center gap-5  h-12 w-48">
+    <div class="flex justify-center items-center gap-5 h-12 w-48">
       <div class="w-20" @click="changeShuffleState">
         <shuffle-icon class="hover:fill-white" :shuffleState="shuffleState" />
       </div>
@@ -24,7 +24,9 @@
       </div>
     </div>
     <div class="progress-container">
-      <small class="text-[#a7a7a7] text-[0.65rem]">{{ songDurationCounter }}</small>
+      <small class="text-[#a7a7a7] text-[0.65rem]">{{
+        songDurationCounter
+      }}</small>
 
       <div class="progressBar">
         <span class="progressTracker"></span>
@@ -37,13 +39,14 @@
 
 <script setup>
 import { onMounted, ref, inject, computed, watch } from "@vue/runtime-core";
-import skipForwardIcon from "../Icons/skipForwardIcon.vue";
-import skipBackIcon from "../Icons/skipBackIcon.vue";
-import pauseIcon from "../Icons/pauseIcon.vue";
-import playIcon from "../Icons/playIcon.vue";
-import repeatIcon from "../Icons/repeatIcon.vue";
-import shuffleIcon from "../Icons/shuffleIcon.vue";
-import ShuffleIcon from "../Icons/shuffleIcon.vue";
+import {
+  skipBackIcon,
+  skipForwardIcon,
+  pauseIcon,
+  playIcon,
+  repeatIcon,
+  shuffleIcon,
+} from "../Icons";
 import store from "../../store";
 /* --------------------------------------------------- */
 const songDurationCounter = ref("0:00");
@@ -54,25 +57,20 @@ const shuffleState = ref(false)
 const emit = defineEmits();
 const props = defineProps(["volume"]);
 const spotify = inject("spotify");
-const currentSong = computed(() => store.getters.getSongItem)
+const currentSong = computed(() => store.getters.getSong??null);
 /* --------------------------------------------------- */
-
-
-
 
 const playBack = async () => {
   let progressTracker = document.querySelector(".progressTracker");
-
-
   setInterval(async () => {
     let playbackData = await getPlaybackData();
-    let volumeData  = playbackData.device.volume_percent;
+    let volumeData = playbackData.device.volume_percent;
     let playbackTime = playbackData.progress_ms;
     let currentsongDuration = currentSong.value.duration_ms;
     songDurationCounter.value = millisToMinutesAndSeconds(playbackTime);
     isPlaying.value = playbackData.is_playing;
-    repeatState.value = playbackData.repeat_state === 'off' ? false : true;
-    shuffleState.value = playbackData.shuffle_state
+    repeatState.value = playbackData.repeat_state === "off" ? false : true;
+    shuffleState.value = playbackData.shuffle_state;
     let progress = (playbackTime / currentsongDuration) * 100;
     progressTracker.style.width = `${progress}%`;
 
@@ -82,19 +80,18 @@ const playBack = async () => {
     if (currentSong.id != playbackData.item.id) {
       emit("changeCurrentSong");
     }
-      emit('setVolume', volumeData)
-  
+    emit("setVolume", volumeData);
   }, 1000);
 };
-
 
 watch(
   () => currentSong.value,
   () => {
-    songDuration.value = millisToMinutesAndSeconds(currentSong.value?.duration_ms);
+    songDuration.value = millisToMinutesAndSeconds(
+      currentSong.value?.duration_ms
+    );
   }
-)
-
+);
 
 const getPlaybackData = async () => {
   return await spotify.getMyCurrentPlaybackState();
@@ -115,25 +112,23 @@ const playMusic = () => {
 };
 
 const changeShuffleState = () => {
-    spotify.setShuffle(!shuffleState.value)
-}
-const changeRepeatState = () =>{
-  let state = !repeatState.value
-  spotify.setRepeat(state ? 'context' : 'off')
-}
+  spotify.setShuffle(!shuffleState.value);
+};
+const changeRepeatState = () => {
+  let state = !repeatState.value;
+  spotify.setRepeat(state ? "context" : "off");
+};
 
-const nextSong =  () => {
+const nextSong = () => {
   spotify.skipToNext();
 };
 
-const previousSong =  () => {
- spotify.skipToPrevious();
-
+const previousSong = () => {
+  spotify.skipToPrevious();
 };
 onMounted(() => {
   //playBack();
 });
-
 </script>
 
 <style scoped>

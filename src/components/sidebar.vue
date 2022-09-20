@@ -8,7 +8,7 @@
         @click="router.push('/')"
         class="flex w-full justify-start px-6 mb-3"
       >
-        <logoVue />
+        <spotify-logo />
       </div>
 
       <ul class="px-6">
@@ -64,17 +64,15 @@
 </template>
 
 <script lang="ts" setup>
-import logoVue from "./logo.vue";
-import homeIcon from "./Icons/homeIcon.vue";
-import searchIcon from "./Icons/searchIcon.vue";
-import libraryIcon from "./Icons/libraryIcon.vue";
-import plusIcon from "./Icons/plusIcon.vue";
-import heartIcon from "./Icons/heartIcon.vue";
+import { homeIcon, searchIcon, libraryIcon, plusIcon, heartIcon  } from "./Icons";
+import { computed, onMounted } from "@vue/runtime-core";
+import spotifyLogo from "./logo.vue";
 import router from "../router";
-import { computed } from "@vue/runtime-core";
 import store from "../store";
-//playlist 30
 const playlists = computed(() => store.getters.playlistItems);
+onMounted(()=>{
+  store.dispatch("getPlaylistsFromSpotify");
+})
 </script>
 
 <style>

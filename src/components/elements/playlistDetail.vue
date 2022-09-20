@@ -72,7 +72,7 @@
                   width="40"
                   height="40"
                   class="object-contain"
-                  :src="playlistItem.track?.album.images[0].url"
+                  :src="playlistItem?.track?.album.images[0]?.url"
                   alt=""
                 />
                 <div class="flex flex-col w-40 justify-around">
@@ -102,29 +102,25 @@
 
 <script setup>
 import { onMounted, computed, ref, inject, watch, onUpdated } from "@vue/runtime-core";
+import { playIcon, heartIcon } from "../Icons";
 import router from "../../router";
 import colorthief from "colorthief";
-import playIcon from "../Icons/playIcon.vue";
-import heartIcon from "../Icons/heartIcon.vue";
 import store from "../../store";
-////////////////////////////////////////////////////////////
+/* --------------------------------------------------- */
 const spotify = inject("spotify");
 const colorThief = new colorthief();
 const playlist = ref(null);
 const playlistImage = ref();
 const playlistID = computed(() => router.currentRoute.value.params.id);
 const backgroundColor = ref(18, 18, 18);
-////////////////////////////////////////////////////////////
+/* --------------------------------------------------- */
 const getPlaylist = async () => {
   playlist.value = await spotify.getPlaylist(playlistID.value);
-  console.log(playlist.value);
 };
 
 const millisToMinutesAndSeconds = (millis) => {
-  let hours = Math.floor(millis / 60000) / 60000;
   let minutes = Math.floor(millis / 60000);
   let seconds = ((millis % 60000) / 1000).toFixed(0);
-
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 };
 
@@ -147,7 +143,7 @@ const playSong = async (song) => {
 };
 
 const setActiveSong = () => {
-  const currentSong = store.getters.getSongItem;
+  const currentSong = store.getters.getSong;
   const tracks = playlist.value.tracks.items;
   tracks.filter((item) =>
     item.track.id === currentSong.id
