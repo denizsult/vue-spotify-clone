@@ -1,38 +1,44 @@
 <template>
-  <div class="flex text-white flex-col w-72 items-center">
-    <div class="flex justify-center items-center gap-5 h-12 w-48">
-      <div class="w-20" @click="changeShuffleState">
-        <shuffle-icon class="hover:fill-white" :shuffleState="shuffleState" />
-      </div>
-      <div class="w-20" @click="previousSong">
-        <skip-back-icon class="hover:fill-white" />
-      </div>
-      <div class="w-20">
-        <button
-          @click="isPlaying ? pauseMusic() : playMusic()"
-          class="playButton"
-        >
-          <play-icon v-if="!isPlaying" />
-          <pause-icon v-else />
-        </button>
-      </div>
-      <div class="w-20" @click="nextSong">
-        <skip-forward-icon class="hover:fill-white" />
-      </div>
-      <div class="w-20" @click="changeRepeatState">
-        <repeat-icon class="hover:fill-white" :repeatState="repeatState" />
-      </div>
-    </div>
-    <div class="progress-container">
-      <small class="text-[#a7a7a7] text-[0.65rem]">{{
-        songDurationCounter
-      }}</small>
-
-      <div class="progressBar">
-        <span class="progressTracker"></span>
+  <div class="flex flex-1 justify-center">
+    <div class="flex text-white mt-1 flex-col items-center">
+      <div class="flex justify-center items-center gap-5 h-12 w-48">
+        <div class="w-20" @click="changeShuffleState">
+          <shuffle-icon class="hover:fill-white" :shuffleState="shuffleState" />
+        </div>
+        <div class="w-20" @click="store.dispatch('previousSong')">
+          <skip-back-icon class="hover:fill-white" />
+        </div>
+        <div class="w-20">
+          <button
+            @click="
+              isPlaying ? store.dispatch('pause') : store.dispatch('play')
+            "
+            class="playButton"
+          >
+          
+            <play-icon v-if="!isPlaying" />
+            <pause-icon v-else />
+          </button>
+        </div>
+        <div class="w-20" @click="store.dispatch('nextSong')">
+          <skip-forward-icon class="hover:fill-white" />
+        </div>
+        <div class="w-20" @click="changeRepeatState">
+          <repeat-icon class="hover:fill-white" :repeatState="repeatState" />
+        </div>
       </div>
 
-      <small class="text-[#a7a7a7] text-[0.65rem]">{{ songDuration }}</small>
+      <div class="progress-container">
+        <small class="text-[#a7a7a7] text-[0.65rem]">{{
+          songDurationCounter
+        }}</small>
+
+        <div class="progressBar">
+          <span class="progressTracker"></span>
+        </div>
+
+        <small class="text-[#a7a7a7] text-[0.65rem]">{{ songDuration }}</small>
+      </div>
     </div>
   </div>
 </template>
@@ -51,13 +57,14 @@ import store from "../../store";
 /* --------------------------------------------------- */
 const songDurationCounter = ref("0:00");
 const songDuration = ref("0:00");
-const isPlaying = ref(true);
-const repeatState = ref(false)
-const shuffleState = ref(false)
+const isPlaying = computed(() => store.getters.getPlayStatus);
+const repeatState = computed(() => store.getters.getRepeatStatus);
+const shuffleState = computed(() => store.getters.getShuffleStatus);
+/* --------------------------------------------------- */
 const emit = defineEmits();
 const props = defineProps(["volume"]);
 const spotify = inject("spotify");
-const currentSong = computed(() => store.getters.getSong??null);
+const currentSong = computed(() => store.getters.getSong);
 /* --------------------------------------------------- */
 
 const playBack = async () => {
@@ -93,22 +100,10 @@ watch(
   }
 );
 
-const getPlaybackData = async () => {
-  return await spotify.getMyCurrentPlaybackState();
-};
-
 const millisToMinutesAndSeconds = (millis) => {
   var minutes = Math.floor(millis / 60000);
   var seconds = ((millis % 60000) / 1000).toFixed(0);
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-};
-
-const pauseMusic = () => {
-  spotify.pause();
-};
-
-const playMusic = () => {
-  spotify.play();
 };
 
 const changeShuffleState = () => {
@@ -119,14 +114,9 @@ const changeRepeatState = () => {
   spotify.setRepeat(state ? "context" : "off");
 };
 
-const nextSong = () => {
-  spotify.skipToNext();
-};
-
-const previousSong = () => {
-  spotify.skipToPrevious();
-};
 onMounted(() => {
+  store.dispatch("getCurrentSongFromSpotify");
+  store.dispatch("getPlayerFromSpotify");
   //playBack();
 });
 </script>

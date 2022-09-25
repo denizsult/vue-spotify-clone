@@ -10,7 +10,6 @@ const initilazeStore = () => {
   store.dispatch("getPlaylistsFromSpotify");
   store.dispatch("getUserFromSpotify");
   store.dispatch("getCurrentSongFromSpotify");
-  store.dispatch('getLastSongFromSpotify')
 };
 
 onMounted(() => {

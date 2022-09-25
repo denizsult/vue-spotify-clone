@@ -2,7 +2,11 @@
   <div ref="backgroundColorContainer" class="backgroundColor"></div>
   <div class="bg-gradiant"></div>
 
-  <div v-if="playlist" class="flex flex-col px-8 gap-10 pt-20 relative">
+  <div
+    ref="playlist-body"
+    v-if="playlist"
+    class="flex flex-col px-8 gap-10 pt-20 relative"
+  >
     <div class="flex gap-4">
       <img
         crossorigin="anonymous"
@@ -11,7 +15,10 @@
         height="232"
         rel="preload"
         class="object-contain"
-        :src="playlist.images[0].url"
+        :src="
+          playlist?.images[0]?.url ??
+          'https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png'
+        "
         alt=""
       />
 
@@ -54,7 +61,7 @@
             :key="playlistItem.id"
             @mouseenter="playlistItem.hover = true"
             @mouseleave="playlistItem.hover = false"
-            @click="playSong(playlistItem.track)"
+            @click.self="playSong(playlistItem.track)"
             class="relative tableRow"
             :class="[playlistItem.active ? 'active' : '']"
           >
@@ -93,6 +100,30 @@
             <td>
               {{ millisToMinutesAndSeconds(playlistItem.track?.duration_ms) }}
             </td>
+
+            <td class="relative z-50 cursor-pointer">
+              <div @click.="showPlaylistsPopup">Çalma Listesine Ekle</div>
+              <div
+                ref=""
+                class="absolute hidden bg-red-400 right-0 overflow-y-scroll overflow-x-hidden top-[-15rem] right-12 bg-[#282828] w-56 h-60 z-10 rounded-md playlists-dropdown"
+              >
+                <ul>
+                  <li
+                    @click="
+                      addSongToPlaylist({
+                        playlist,
+                        songId: playlistItem.track.uri,
+                      })
+                    "
+                    v-for="playlist in playlists"
+                    :key="playlist.id"
+                    class="hover:bg-[hsla(0,0%,100%,.1)] w-full h-auto flex justify-start align-center px-3 py-1"
+                  >
+                    {{ playlist.name }}
+                  </li>
+                </ul>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -101,7 +132,14 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref, inject, watch, onUpdated } from "@vue/runtime-core";
+import {
+  onMounted,
+  computed,
+  ref,
+  inject,
+  watch,
+  onUpdated,
+} from "@vue/runtime-core";
 import { playIcon, heartIcon } from "../Icons";
 import router from "../../router";
 import colorthief from "colorthief";
@@ -110,9 +148,11 @@ import store from "../../store";
 const spotify = inject("spotify");
 const colorThief = new colorthief();
 const playlist = ref(null);
+const playlistBody = ref();
 const playlistImage = ref();
 const playlistID = computed(() => router.currentRoute.value.params.id);
 const backgroundColor = ref(18, 18, 18);
+const playlists = computed(() => store.getters.playlistItems);
 /* --------------------------------------------------- */
 const getPlaylist = async () => {
   playlist.value = await spotify.getPlaylist(playlistID.value);
@@ -122,6 +162,18 @@ const millisToMinutesAndSeconds = (millis) => {
   let minutes = Math.floor(millis / 60000);
   let seconds = ((millis % 60000) / 1000).toFixed(0);
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+};
+const showPlaylistsPopup = (e) => {
+  hideActivePlaylistsPopup();
+  let dropDown = e.target.parentNode.querySelector(".playlists-dropdown");
+  dropDown.classList.add("active");
+};
+
+const hideActivePlaylistsPopup = () => {
+  let activeDropDown = document.querySelector(".playlists-dropdown.active");
+  if (activeDropDown) {
+    activeDropDown.classList.remove("active");
+  }
 };
 
 const calcDate = (date) => {
@@ -155,18 +207,30 @@ const setActiveSong = () => {
 watch(
   () => playlistID.value,
   async () => {
-    await getPlaylist()
+    hideActivePlaylistsPopup();
+    await getPlaylist();
   }
 );
 
-onUpdated(()=> {
+const addSongToPlaylist = (data) => {
+  store.dispatch("addSongToSelectedPlaylist", data).then(() => {
+    store.commit("setToastActiveStatus", true);
+    store.commit("setToastText", "Şarkı, Çalma Listesine Eklendi.");
+  });
+};
+
+onUpdated(() => {
   playlistImage.value.addEventListener("load", () => {
     backgroundColor.value = colorThief.getColor(playlistImage.value);
-  });})
+  });
+});
 
 onMounted(async () => {
   await getPlaylist();
   setActiveSong();
+  playlistBody.value.addEventListener("click", () => {
+    alert("dsaldjaslşjdaslşjdakslhsd");
+  });
 });
 </script>
 
@@ -243,6 +307,9 @@ onMounted(async () => {
   left: 0;
   border-radius: 5px;
   background: hsla(0, 0%, 50%, 0.3);
+}
+.playlists-dropdown.active {
+  display: block;
 }
 
 .tableRow:hover::after {

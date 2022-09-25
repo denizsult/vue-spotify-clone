@@ -10,17 +10,26 @@ import player from "./spotify/player";
 const store = createStore({
     state: {
         user: {},
-        layout: false
-     },
+        layout: false,
+        isToastActive: false,
+        toastText: ''
+    },
     mutations: {
         setUser(state, user) {
             state.user = user;
         },
 
-        setLayout(state, layout){
+        setLayout(state, layout) {
             state.layout = layout
+        },
+
+        setToastActiveStatus(state, isActive) {
+            state.isToastActive = isActive
+        },
+        setToastText(state, text) {
+            state.toastText = text
         }
-       
+        
 
     },
     getters: {
@@ -28,17 +37,31 @@ const store = createStore({
             return state.user;
         },
 
-        getLayout(state){
+        getLayout(state) {
             return state.layout
-        }
-       
+        },
+
+        getToastStatus(state) {
+            return state.isToastActive
+        },
+
+        getToastText(state) {
+            return state.toastText
+        },
+
     },
 
     actions: {
         async getUserFromSpotify({ commit }) {
             spotify.getMe().then((response) => {
+                console.log(response);
                 commit('setUser', response)
             }).catch(() => { localStorage.setItem('token', ''); router.push('/login') })
+        },
+
+        clearToast({state}){
+            state.isToastActive = false,
+            state.toastText = '';
         }
     },
 

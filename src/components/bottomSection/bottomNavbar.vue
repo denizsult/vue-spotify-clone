@@ -6,13 +6,13 @@
           :src="currentSong.album.images[2].url"
           :width="currentSong.album.images[2].width"
           :height="currentSong.album.images[2].height"
-          alt=""
+          alt="curretSongImage"
         />
         <div class="flex flex-col">
           <h3 class="text-white whitespace-nowrap text-sm">
             {{ currentSong.name }}
           </h3>
-          <small class="text-white text-xs">{{
+          <small class="text-white truncate text-[.7rem]">{{
             currentSong.artists[0].name
           }}</small>
         </div>
@@ -49,10 +49,10 @@ const spotify = inject("spotify");
 const volume = ref(0);
 const volumeDOM = ref();
 const volumeProgress = ref(0);
-const currentSong = computed(()=> store.getters.getSongItem??null);
 
 
-store.dispatch('getPlayerFromSpotify')
+const currentSong = computed(() => store.getters.getSong??null);
+
 
 const setVolume = (data) => {
   volumeDOM.value.value = data;
@@ -65,7 +65,10 @@ const setVolumeSpotify = () => {
   setVolume(volume.value);
 };
 
+
+
 </script>
+
 
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div
     id="sidebar"
-    class="bg-black flex items-start justify-between flex-col overflow-hidden gap-5 text-[#b3b3b3] overlow-hidden"
+    class="bg-black flex items-start justify-between flex-col gap-5 text-[#b3b3b3] overlow-hidden"
   >
     <div class="flex w-full  flex-col gap-5">
       <div
@@ -17,10 +17,11 @@
         <li><library-icon /> Kitaplığın</li>
       </ul>
       <div class="flex flex-col px-6 gap-4">
-        <a class="flex gap-4 items-center" href="">
+        <a class="flex gap-4 items-center" @click="store.dispatch('createPlaylist')" href="#">
           <div
             class="bg-gray-300 w-6 h-6 flex items-center justify-center rounded-sm"
           >
+          
             <plus-icon />
           </div>
           Çalma Listesi Oluştur</a
@@ -40,7 +41,7 @@
       </div>
 
       <div
-        class="px-6 text-sm flex flex-col overflow-scroll h-full gap-2 w-full mb-12 "
+        class="text-sm flex flex-col overflow-y-scroll h-96 w-full  "
       >
         <div
           @click="
@@ -48,7 +49,7 @@
           "
           v-for="playlist in playlists"
           :key="playlist?.id"
-          class="cursor-pointer truncate  "
+          class="cursor-pointer   m-2 "
 
         >
           {{ playlist.name }}

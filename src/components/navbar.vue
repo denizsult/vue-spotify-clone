@@ -61,7 +61,7 @@ const background = props.isSearch ? "rgba(0,0,0,.5)" : "transparent";
 
 <style scoped>
 .navBar {
-  z-index: 2;
+  z-index: 100;
   background: v-bind(background);
 }
 </style>
